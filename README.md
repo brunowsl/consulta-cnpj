@@ -111,16 +111,31 @@ fetch('http://localhost:3000/api/consulta-cnpj', {
             "situacao_cadastral": "ATIVA",
             "atividade_principal": [
                 {
-                    "codigo": "6422-1/00",
-                    "descricao": "Bancos múltiplos, com carteira comercial"
+                    "code": "6422-1/00",
+                    "text": "Bancos múltiplos, com carteira comercial",
+                    "detalhes": {
+                        "codigo": "6422100",
+                        "descricao": "Bancos múltiplos, com carteira comercial",
+                        "grupo": "Intermediação monetária - depósitos à vista",
+                        "divisao": "Atividades de serviços financeiros",
+                        "secao": "Atividades financeiras, de seguros e serviços relacionados"
+                    }
                 }
             ],
             "atividades_secundarias": [
                 {
-                    "codigo": "6435-2/03",
-                    "descricao": "Companhias hipotecárias"
+                    "code": "6435-2/03",
+                    "text": "Companhias hipotecárias",
+                    "detalhes": {
+                        "codigo": "6435203",
+                        "descricao": "Companhias hipotecárias",
+                        "grupo": "Outras atividades de serviços financeiros",
+                        "divisao": "Atividades de serviços financeiros",
+                        "secao": "Atividades financeiras, de seguros e serviços relacionados"
+                    }
                 }
             ],
+            "observacao_sindicato": "Para obter a entidade sindical específica, consulte o Cadastro Nacional de Entidades Sindicais (CNES) em https://www3.mte.gov.br/cnes/ utilizando as informações do CNAE e localização da empresa",
             // ... outros dados da empresa
         },
         "error": null
@@ -133,6 +148,23 @@ fetch('http://localhost:3000/api/consulta-cnpj', {
     }
 ]
 ```
+
+## Informações sobre CNAE e Sindicatos
+
+A API agora fornece informações detalhadas sobre os CNAEs da empresa, incluindo:
+
+- Código e descrição do CNAE
+- Grupo econômico
+- Divisão
+- Seção
+
+Para identificar a entidade sindical correspondente, utilize estas informações em conjunto com:
+
+1. Base territorial da empresa (município/estado)
+2. Categoria econômica principal
+3. Consulta ao Cadastro Nacional de Entidades Sindicais (CNES)
+
+O link para consulta ao CNES é fornecido na resposta da API através do campo `observacao_sindicato`.
 
 ## Limitações
 
