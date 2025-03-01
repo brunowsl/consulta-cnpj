@@ -1,6 +1,6 @@
 # API de Consulta de CNPJs
 
-API para consulta em lote de CNPJs através de arquivo CSV. A API processa o arquivo, valida cada CNPJ e retorna informações detalhadas de cada empresa.
+API para consulta em lote de CNPJs através de arquivo CSV. A API processa o arquivo, valida cada CNPJ e retorna informações detalhadas de cada empresa, incluindo dados cadastrais e códigos CNAE.
 
 ## Requisitos
 
@@ -109,6 +109,18 @@ fetch('http://localhost:3000/api/consulta-cnpj', {
             "razao_social": "BANCO BRADESCO S.A.",
             "nome_fantasia": "BRADESCO",
             "situacao_cadastral": "ATIVA",
+            "atividade_principal": [
+                {
+                    "codigo": "6422-1/00",
+                    "descricao": "Bancos múltiplos, com carteira comercial"
+                }
+            ],
+            "atividades_secundarias": [
+                {
+                    "codigo": "6435-2/03",
+                    "descricao": "Companhias hipotecárias"
+                }
+            ],
             // ... outros dados da empresa
         },
         "error": null
@@ -124,9 +136,10 @@ fetch('http://localhost:3000/api/consulta-cnpj', {
 
 ## Limitações
 
-- A API utiliza o serviço público CNPJ.ws para consultas, que possui limites de requisições
+- A API utiliza o serviço ReceitaWS para consultas, que possui limites de requisições
 - O arquivo CSV deve ter tamanho máximo de 10MB
 - Recomenda-se não enviar mais de 100 CNPJs por vez para evitar sobrecarga
+- A API da ReceitaWS tem um limite de 3 consultas por minuto na versão gratuita
 
 ## Desenvolvimento
 
