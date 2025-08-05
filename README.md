@@ -2,6 +2,39 @@
 
 API para consulta em lote de CNPJs através de arquivo CSV. A API processa o arquivo, valida cada CNPJ e retorna informações detalhadas de cada empresa, incluindo dados cadastrais e códigos CNAE.
 
+## 🚀 Status do Projeto
+
+- ✅ **Docker**: Configurado e pronto para uso
+- ✅ **Health Check**: Endpoints de monitoramento implementados
+- ✅ **CI/CD**: Configurado para deploy automático com Dokploy
+- ✅ **Documentação**: Completa e atualizada
+
+## 🐳 Deploy e Execução
+
+### Rodando com Docker (Recomendado)
+
+```bash
+# Construir e rodar a aplicação
+docker build -t consulta-cnpj .
+docker run -p 3000:3000 consulta-cnpj
+
+# Ou usando docker-compose
+docker-compose up --build
+```
+
+### Rodando Localmente
+
+```bash
+# Instalar dependências
+npm install
+
+# Rodar em desenvolvimento
+npm run dev
+
+# Rodar em produção
+npm start
+```
+
 ## Requisitos
 
 - Node.js 14.x ou superior
@@ -33,9 +66,26 @@ PORT=3000
 
 ## Uso da API
 
-### Endpoint de Consulta
+### Endpoints Disponíveis
 
-`POST /api/consulta-cnpj`
+#### 1. Health Check
+- `GET /health` - Status da aplicação
+- `GET /api/health` - Status da aplicação (alternativo)
+
+**Resposta:**
+```json
+{
+  "status": "OK",
+  "timestamp": "2024-01-15T10:30:00.000Z",
+  "uptime": 3600.5,
+  "environment": "development",
+  "version": "1.0.0"
+}
+```
+
+#### 2. Endpoint de Consulta
+
+`POST /api/consultar-cnpj`
 
 Este endpoint recebe um arquivo CSV contendo CNPJs e retorna as informações de cada empresa.
 
@@ -81,15 +131,25 @@ A API retorna um array JSON onde cada elemento contém:
 
 Usando curl:
 ```bash
-curl -X POST -F "file=@cnpjs.csv" http://localhost:3000/api/consulta-cnpj
+# Testar health check
+curl http://localhost:3000/health
+
+# Consultar CNPJs
+curl -X POST -F "file=@cnpjs.csv" http://localhost:3000/api/consultar-cnpj
 ```
 
 Usando JavaScript/Fetch:
 ```javascript
+// Testar health check
+fetch('http://localhost:3000/health')
+  .then(response => response.json())
+  .then(data => console.log('Health:', data));
+
+// Consultar CNPJs
 const formData = new FormData();
 formData.append('file', csvFile);
 
-fetch('http://localhost:3000/api/consulta-cnpj', {
+fetch('http://localhost:3000/api/consultar-cnpj', {
     method: 'POST',
     body: formData
 })
@@ -173,13 +233,47 @@ O link para consulta ao CNES é fornecido na resposta da API através do campo `
 - Recomenda-se não enviar mais de 100 CNPJs por vez para evitar sobrecarga
 - A API da ReceitaWS tem um limite de 3 consultas por minuto na versão gratuita
 
-## Desenvolvimento
+## 🏗️ Estrutura do Projeto
+
+```
+consulta-cnpj/
+├── src/
+│   ├── app.js              # Aplicação principal
+│   ├── services/
+│   │   ├── cnpjConsulta.js # Serviço de consulta CNPJ
+│   │   └── csvProcessor.js # Processamento de CSV
+│   └── utils/
+│       └── cnpjValidator.js # Validação de CNPJ
+├── Dockerfile              # Configuração Docker
+├── .dockerignore           # Arquivos ignorados no Docker
+├── .github/workflows/      # CI/CD GitHub Actions
+├── dokploy.yaml           # Configuração Dokploy
+└── DEPLOY.md              # Documentação de deploy
+```
+
+## 🔧 Desenvolvimento
 
 Para rodar a API em modo desenvolvimento com hot-reload:
 
 ```bash
 npm run dev
 ```
+
+## 🚀 Deploy Automático
+
+O projeto está configurado para deploy automático usando:
+- **GitHub Actions**: Build e push da imagem Docker
+- **Dokploy**: Deploy automático em produção
+- **Health Checks**: Monitoramento automático
+
+Veja o arquivo `DEPLOY.md` para instruções detalhadas.
+
+## 📊 Monitoramento
+
+- **Health Check**: `/health` e `/api/health`
+- **Logs**: Centralizados via Docker
+- **Métricas**: CPU, memória e requisições HTTP
+- **Status**: Monitoramento automático via Docker health checks
 
 ## Licença
 
